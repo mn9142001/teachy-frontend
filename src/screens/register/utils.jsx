@@ -1,12 +1,21 @@
-import { setAuthToken } from "../../hooks/is_anonymous";
+import { Navigate } from 'react-router-dom';
+import { setAuthToken, TOKEN_KEYWORD } from "../../hooks/is_anonymous";
+
+const PROFILE_KEYWORD = "profile_data"
 
 const setAuthData = response => {
     setAuthToken(response.data.access)
-    sessionStorage.setItem("profile_data", JSON.stringify(response.data))
+    sessionStorage.setItem(PROFILE_KEYWORD, JSON.stringify(response.data))
 }
 
 const getAuthData = _ => {
-    return JSON.parse(sessionStorage.getItem("profile_data"))
+    return JSON.parse(sessionStorage.getItem(PROFILE_KEYWORD))
 }
 
-export {setAuthData, getAuthData}
+const LogOut = _ => {
+    sessionStorage.removeItem(PROFILE_KEYWORD)
+    sessionStorage.removeItem(TOKEN_KEYWORD)
+    return <Navigate to={"/login/"} />
+}
+
+export {setAuthData, getAuthData, LogOut}

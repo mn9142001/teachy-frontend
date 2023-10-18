@@ -11,9 +11,13 @@ import "./index.css";
 import ProtectedComponent from './components/protected_route';
 import LogIn from './screens/register/login';
 import SignUp from './screens/register/signup';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import Stream from './screens/courses/streaming';
 import NavBar from './components/nav';
+import { LogOut } from './screens/register/utils';
+import MyLearning from './screens/learning';
+import ExamStart from './screens/exam/exam';
+import { ErrorProvider } from './hooks/use_error';
 
 
 
@@ -21,7 +25,7 @@ import NavBar from './components/nav';
 const router = createBrowserRouter([
         {
             path: "/",
-            element: <ProtectedComponent component={<App />} />
+            element: <App /> //<ProtectedComponent component={<App />} />
         },
         {
             path : "/login/",
@@ -36,6 +40,18 @@ const router = createBrowserRouter([
             element : <ProtectedComponent component={<Stream />} />
         },
         {
+            path : "/exam/:id/start/",
+            element : <ProtectedComponent component={<ExamStart />} />
+        },
+        {
+            path : "/logout",
+            element : <LogOut />
+        },
+        {
+            path : "/learning",
+            element : <MyLearning />
+        },
+        {
             path : "*",
             element : <SignUp />
         }
@@ -47,10 +63,12 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 const queryClient = new QueryClient()
 
 root.render(
-    <QueryClientProvider client={queryClient}>
-            <NavBar />
-            <RouterProvider router={router} />
-    </QueryClientProvider>
+    <ErrorProvider>
+        <QueryClientProvider client={queryClient}>
+                <NavBar />
+                <RouterProvider router={router} />
+        </QueryClientProvider>
+    </ErrorProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

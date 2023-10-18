@@ -4,10 +4,11 @@ const getAuthToken = _ => {
     return token
 }
 
-const setAuthToken = _token => {
-    sessionStorage.setItem("token", _token)
-}
+const TOKEN_KEYWORD = "token"
 
+const setAuthToken = _token => {
+    sessionStorage.setItem(TOKEN_KEYWORD, _token)
+}
 
 const IsAuthenticated = _ => {
     let token = getAuthToken()
@@ -15,5 +16,4 @@ const IsAuthenticated = _ => {
 
 }
 
-export {getAuthToken, setAuthToken, IsAuthenticated}
-
+export {getAuthToken, setAuthToken, IsAuthenticated, TOKEN_KEYWORD}

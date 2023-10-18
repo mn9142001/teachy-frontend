@@ -1,6 +1,6 @@
 import { getAuthData } from "../screens/register/utils";
 import DropDown from "./dropdown";
-
+import {LOGOUT} from "../utils/constants";
 
 const NavBarUserComponent = ({data}) => {
 
@@ -12,7 +12,7 @@ const NavBarUserComponent = ({data}) => {
             "label": "Account",
         },
         {
-            "label": "LogOut",
+            "label": "LogOut", href : LOGOUT
         },
     ]
 

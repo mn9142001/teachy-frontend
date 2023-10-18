@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import isFormValid from "./validator";
 import axios from "axios";
-import { useMutation } from "react-query";
 import { AUTH_HEADER } from "./constants";
 import {getAuthToken} from "../hooks/is_anonymous"
+import { useMutation } from "@tanstack/react-query";
 
-const GenericForm = ({ fields, onSubmit, onSuccess, onPreSubmit, submitUrl, onError, method="post", useToken, token, formStyle, formDivStyle }) => {
+const GenericForm = ({ fields, onSubmit, onSuccess, onPreSubmit, submitUrl, onError, method="post", useToken, token, formStyle, formDivStyle, modifyData }) => {
     const initialFormData = fields.reduce((acc, field) => {
         acc[field.name] = "";
         return acc;
@@ -26,6 +26,11 @@ const GenericForm = ({ fields, onSubmit, onSuccess, onPreSubmit, submitUrl, onEr
     };
 
     const sendData = data => {
+
+        if(modifyData){
+            data = modifyData(data);
+        }
+
         let config = {
             method : method,
             data : data,
@@ -82,15 +87,15 @@ const GenericForm = ({ fields, onSubmit, onSuccess, onPreSubmit, submitUrl, onEr
         }
     };
 
-    const inputStyle = "p-1 text-center border-black border-2 text-black rounded-md m-2";
+    const inputStyle = "p-1 text-center border-black border-2 text-black rounded-md";
 
     return (
-        <div className="w-screen max-w-screen h-screen flex items-center justify-center">
-            <form className="flex flex-col w-fit p-2" onSubmit={formSubmitHandler}>
+        <div className="w-full max-w-screen flex-1 flex items-center justify-center">
+            <form className={formStyle || "flex flex-col w-fit p-2"} onSubmit={formSubmitHandler}>
                 {fields.map((field) => (
-                    field.isCustomComponent ? <field.element key={field.name} onValueChange={value => setData(field.name, value)} /> :
-                    <input
-                        key={field.name}
+                    field.element ? <field.element key={field.name} onValueChange={value => setData(field.name, value)} /> :
+                    <div className="p-2" key={field.name} >
+                        <input
                         className={inputStyle}
                         placeholder={field.placeholder}
                         type={field.type}
@@ -98,6 +103,7 @@ const GenericForm = ({ fields, onSubmit, onSuccess, onPreSubmit, submitUrl, onEr
                         onChange={inputChangeHandler}
                         value={formData[field.name]}
                     />
+                    </div>
                 ))}
                 <button disabled={mutateData.isLoading} type="submit" className="p-2 bg-gray-500 text-white">
                     Submit

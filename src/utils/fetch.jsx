@@ -40,4 +40,16 @@ const axiosFetchRequest = ({url, useToken}) => {
     return axios.get(url, options)
 }
 
-export {JsonFetch, axiosFetchRequest}
+
+const axiosPost = ({url, data, useToken}) => {
+    let options = {}
+
+    if (useToken === true) {
+        options['headers'] = {}
+        options['headers']['Authorization'] = `${AUTH_HEADER} ${getAuthToken()}`
+    }
+
+    return axios.post(url, data, options)
+}
+
+export {JsonFetch, axiosFetchRequest, axiosPost}
